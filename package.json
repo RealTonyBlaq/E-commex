@@ -1,0 +1,51 @@
+{
+    "name": "E-commex",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "lint": "./node_modules/.bin/eslint",
+        "check-lint": "lint [0-9]*.js",
+        "start-server": "nodemon --exec babel-node --presets @babel/preset-env ./server.js",
+        "test": "./node_modules/.bin/mocha --require @babel/register --exit",
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    },
+    "author": "Ifeanyi Ikpenyi",
+    "license": "ISC",
+    "dependencies": {
+        "bcrypt": "^5.1.0",
+        "bull": "^3.16.0",
+        "chai-http": "^4.3.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.1.4",
+        "express": "^4.18.2",
+        "express-validator": "^6.15.0",
+        "image-thumbnail": "^1.0.10",
+        "jsonwebtoken": "^9.0.1",
+        "mime-types": "^2.1.27",
+        "mongodb": "^3.7.4",
+        "mongoose": "^7.5.1",
+        "redis": "^4.7.0",
+        "sha1": "^1.1.1",
+        "uuid": "^8.2.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.8.0",
+        "@babel/core": "^7.8.0",
+        "@babel/node": "^7.8.0",
+        "@babel/preset-env": "^7.8.2",
+        "@babel/register": "^7.8.0",
+        "chai": "^4.2.0",
+        "chai-http": "^4.3.0",
+        "eslint": "^6.4.0",
+        "eslint-config-airbnb-base": "^14.0.0",
+        "eslint-plugin-import": "^2.18.2",
+        "eslint-plugin-jest": "^28.10.0",
+        "mocha": "^11.0.1",
+        "nodemon": "^3.0.1",
+        "request": "^2.88.0",
+        "sinon": "^7.5.0"
+    }
+}
