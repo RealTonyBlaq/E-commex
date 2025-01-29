@@ -51,10 +51,13 @@ class UserController {
     const updates = {};
     Object.keys(req.body).forEach((update) => {
         if (allowedUpdates.includes(update)) {
-            if 
             updates[update] = req.body[update];
         }
     });
+
+    if (updates.password) {
+        updates.password = await bcrypt.hash(updates.password, 10);
+    }
 
     try {
       const user = await User.findByIdAndUpdate(id, updates, {
@@ -71,6 +74,15 @@ class UserController {
         return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
   }
+
+  static async deleteUser(req, res) {
+    const { id } = req.params;
+    try {
+      const user = await User.findByIdAndDelete(id);
+      
+    } catch (error) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+    }
 }
 
 export default UserController;
