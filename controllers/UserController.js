@@ -33,6 +33,8 @@ class UserController {
 
   static async getUser(req, res) {
     const { id } = req.params;
+    if (!id) return res.status(StatusCodes.OK).json(await User.find());
+
     try {
       const user = await User.findById(id);
       if (!user) {
