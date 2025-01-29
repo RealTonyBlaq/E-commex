@@ -50,6 +50,7 @@ class UserController {
     const { id } = req.params;
     const allowedUpdates = ["firstName", "lastName", "password", "phoneNumber"];
     const updates = {};
+
     Object.keys(req.body).forEach((update) => {
       if (allowedUpdates.includes(update)) {
         updates[update] = req.body[update];
