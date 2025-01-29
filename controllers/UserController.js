@@ -44,8 +44,7 @@ class UserController {
   static async updateUser(req, res, id) {
     const updates = Object.keys(req.body);
     const allowedUpdates = ["firstName", "lastName", "password", "phoneNumber"];
-    if
-    );
+    
 
     try {
       const user = await User.findByIdAndUpdate(id, req.body, {
