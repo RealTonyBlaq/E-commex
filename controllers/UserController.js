@@ -27,7 +27,8 @@ class UserController {
     }
   }
 
-  static async getUser(req, res, id) {
+  static async getUser(req, res) {
+    const { id } = req.params;
     try {
       const user = await User.findById(id);
       if (!user) {
@@ -41,7 +42,8 @@ class UserController {
     }
   }
 
-  static async updateUser(req, res, id) {
+  static async updateUser(req, res) {
+    const { id } = req.params;
     const allowedUpdates = ["firstName", "lastName", "password", "phoneNumber"];
     const updates = {};
     Object.keys(req.body).forEach((update) => {
@@ -64,6 +66,7 @@ class UserController {
     } catch (error) {
         return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
+    
 }
 
 export default UserController;
