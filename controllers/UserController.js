@@ -1,5 +1,6 @@
 import { User } from "../schema/user.js";
 import bcrypt from "bcryptjs";
+import { isValidObjectId } from "mongoose";
 import { StatusCodes } from "http-status-codes";
 
 class UserController {
@@ -50,13 +51,13 @@ class UserController {
     const allowedUpdates = ["firstName", "lastName", "password", "phoneNumber"];
     const updates = {};
     Object.keys(req.body).forEach((update) => {
-        if (allowedUpdates.includes(update)) {
-            updates[update] = req.body[update];
-        }
+      if (allowedUpdates.includes(update)) {
+        updates[update] = req.body[update];
+      }
     });
 
     if (updates.password) {
-        updates.password = await bcrypt.hash(updates.password, 10);
+      updates.password = await bcrypt.hash(updates.password, 10);
     }
 
     try {
@@ -64,25 +65,33 @@ class UserController {
         new: true,
         runValidators: true,
       });
-        if (!user) {
-            return res
-            .status(StatusCodes.NOT_FOUND)
-            .json({ error: "User not found" });
-        }
-        return res.status(StatusCodes.OK).json(user);
+      if (!user) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ error: "User not found" });
+      }
+      return res.status(StatusCodes.OK).json(user);
     } catch (error) {
-        return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
   }
 
   static async deleteUser(req, res) {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "User not found" });
+    }
+
     try {
-      const user = await User.findByIdAndDelete(id);
-      
+      await User.findByIdAndDelete(id);
+      return res.status(StatusCodes.OK).json({});
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
+  }
 }
 
 export default UserController;
