@@ -1,4 +1,5 @@
 import { User } from "../schema/user.js";
+import bcrypt from "bcryptjs";
 import { StatusCodes } from "http-status-codes";
 
 class UserController {
@@ -13,11 +14,13 @@ class UserController {
           .json({ error: "User already exists" });
       }
 
+      const hashedPassword = await bcrypt.hash(password, 10);
+
       const user = new User({
         firstName,
         lastName,
         email,
-        password,
+        password: hashedPassword,
         phoneNumber,
       });
       await user.save();
@@ -48,6 +51,7 @@ class UserController {
     const updates = {};
     Object.keys(req.body).forEach((update) => {
         if (allowedUpdates.includes(update)) {
+            if 
             updates[update] = req.body[update];
         }
     });
@@ -66,7 +70,7 @@ class UserController {
     } catch (error) {
         return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
-    
+  }
 }
 
 export default UserController;
