@@ -42,8 +42,21 @@ class UserController {
   }
 
   static async updateUser(req, res, id) {
+    
     try {
       const user = await User.findByIdAndUpdate(id, req.body, {
+        new: true,
+        runValidators: true,
+      });
+        if (!user) {
+            return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ error: "User not found" });
+        }
+        return res.status(StatusCodes.OK).json(user);
+    } catch (error) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+    }
 }
 
 export default UserController;
