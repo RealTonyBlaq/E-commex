@@ -1,5 +1,4 @@
 import { User } from "../schema/user.js";
-import { isValidObjectId } from "mongoose";
 import { StatusCodes } from "http-status-codes";
 
 class UserController {
@@ -41,6 +40,10 @@ class UserController {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
   }
+
+  static async updateUser(req, res, id) {
+    try {
+      const user = await User.findByIdAndUpdate(id, req.body, {
 }
 
 export default UserController;
