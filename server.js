@@ -14,8 +14,8 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
-app.use(router);
 app.use(cors());
+app.use(router);
 
 app.get("/", (req, res) => {
   return res.send("Hello World\n").status(StatusCodes.OK);
