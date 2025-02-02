@@ -5,9 +5,9 @@ const router = Router();
 
 router
   .route("/users")
-  .post(UserController.createUser)
-  .get(UserController.getUser)
-  .put(UserController.updateUser)
-  .delete(UserController.deleteUser);
+  .post(await UserController.createUser)
+  .get(await UserController.getUser)
+  .put(await UserController.updateUser)
+  .delete(await UserController.deleteUser);
 
 export default router;
