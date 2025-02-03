@@ -28,6 +28,7 @@ class ProductController {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
   }
+
   static async getProduct (req, res) {
     const id = req.query.id;
     if (!id) {
@@ -38,16 +39,18 @@ class ProductController {
 
     try {
       const product = await Product.findById(id);
-      if (!product) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ error: 'Product not found' });
-      }
+      if (!product) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Product not found' });
+
       return res.status(StatusCodes.OK).json(product);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
   }
+
+    static async updateProduct (req, res) {
+        const id = req.query.id;
+        const allowedUpdates = ['name', 'description', 'price', 'stockQuantity', 'categoryId', 'imageURL'];
+        const updates = {};
 }
 
 export default ProductController;
