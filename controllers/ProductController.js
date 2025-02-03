@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 
 class ProductController {
     static async createProduct(req, res) {
-        const { name, description, price, stockQuantity, categoryId } = req.body;
+        const { name, description, price, stockQuantity, categoryId,  } = req.body;
         if (!name || !description || !price || !stockQuantity || !categoryId) {
             return res
                 .status(StatusCodes.BAD_REQUEST)
