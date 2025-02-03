@@ -51,6 +51,13 @@ class ProductController {
         const id = req.query.id;
         const allowedUpdates = ['name', 'description', 'price', 'stockQuantity', 'categoryId', 'imageURL'];
         const updates = {};
+
+        if (!id) return res.status(StatusCodes.BAD_REQUEST).json({ error: 'No ID passed' });
+        if (!isValidObjectId(id)) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Invalid ID' });
+
+        allowedUpdates.forEach((update) => {
+            if (req.body[update]) updates[update] = req.body[update];
+        });
 }
 
 export default ProductController;
