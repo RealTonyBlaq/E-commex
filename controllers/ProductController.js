@@ -1,3 +1,4 @@
+/* Product controller */
 import { isValidObjectId } from 'mongoose';
 import { Product } from '../schema/product';
 import { StatusCodes } from 'http-status-codes';
