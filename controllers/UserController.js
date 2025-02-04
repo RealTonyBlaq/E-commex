@@ -1,5 +1,4 @@
 import { User } from '../schema/user.js';
-import bcrypt from 'bcryptjs';
 import { isValidObjectId } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
 
@@ -15,15 +14,16 @@ class UserController {
           .json({ error: 'User already exists' });
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+      /* const hashedPassword = await bcrypt.hash(password, 10); */
 
       const user = new User({
         firstName,
         lastName,
         email,
-        password: hashedPassword,
+        password,
         phoneNumber
       });
+
       await user.save();
       return res.status(StatusCodes.CREATED).json(user);
     } catch (error) {
@@ -58,7 +58,7 @@ class UserController {
     const updates = {};
 
     if (!id) return res.status(StatusCodes.BAD_REQUEST).json({ error: 'No ID passed' });
-    if (!isValidObjectId(id)) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Invalid ID' });
+    if (!isValidObjectId(id)) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Invalid User ID' });
 
     Object.keys(req.body).forEach((update) => {
       if (allowedUpdates.includes(update)) {
@@ -66,15 +66,16 @@ class UserController {
       }
     });
 
-    if (updates.password) {
+    /* if (updates.password) {
       updates.password = await bcrypt.hash(updates.password, 10);
-    }
+    } */
 
     try {
       const user = await User.findByIdAndUpdate(id, updates, {
         new: true,
         runValidators: true
       });
+
       if (!user) {
         return res
           .status(StatusCodes.NOT_FOUND)
@@ -93,8 +94,13 @@ class UserController {
     if (!isValidObjectId(id)) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Invalid ID' });
 
     try {
-      await User.findByIdAndDelete(id);
-      return res.status(StatusCodes.OK).json({});
+      const user = await User.findByIdAndDelete(id);
+      if (!user) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ error: 'User not found' });
+      }
+      return res.status(StatusCodes.OK).json({ message: 'User deleted' });
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
