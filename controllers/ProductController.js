@@ -47,36 +47,51 @@ class ProductController {
     }
   }
 
-    static async updateProduct (req, res) {
-        const id = req.query.id;
-        const allowedUpdates = ['name', 'description', 'price', 'stockQuantity', 'categoryId', 'imageURL'];
-        const updates = {};
+  static async updateProduct (req, res) {
+    const id = req.query.id;
+    const allowedUpdates = ['name', 'description', 'price', 'stockQuantity', 'categoryId', 'imageURL'];
+    const updates = {};
 
-        if (!id) return res.status(StatusCodes.BAD_REQUEST).json({ error: 'No ID passed' });
-        if (!isValidObjectId(id)) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Invalid ID' });
+    if (!id) return res.status(StatusCodes.BAD_REQUEST).json({ error: 'No ID passed' });
+    if (!isValidObjectId(id)) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Invalid ID' });
 
-        allowedUpdates.forEach((update) => {
-            if (req.body[update]) updates[update] = req.body[update];
-        });
+    allowedUpdates.forEach((update) => {
+      if (req.body[update]) updates[update] = req.body[update];
+    });
 
-        if (updates.categoryId && !isValidObjectId(updates.categoryId)) {
-            return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid category ID' });
-        }
+    if (updates.categoryId && !isValidObjectId(updates.categoryId)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid category ID' });
+    }
 
-        if (updates.name && await Product.findOne({ name: updates.name })) {
-            return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Product name already exists' });
-        }
+    if (updates.name && await Product.findOne({ name: updates.name })) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Product name already exists' });
+    }
 
-        try {
-            const product = await Product.findByIdAndUpdate(id, updates, {
-                new: true,
-                runValidators: true
-            });
-            if (!product) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Product not found' });
-            return res.status(StatusCodes.OK).json(product);
-        } catch (error) {
-            return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
-        }
+    try {
+      const product = await Product.findByIdAndUpdate(id, updates, {
+        new: true,
+        runValidators: true
+      });
+
+      if (!product) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Product not found' });
+      return res.status(StatusCodes.OK).json(product);
+    } catch (error) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+    }
+  }
+
+  static async deleteProduct (req, res) {
+    const id = req.query.id;
+    if (!id) return res.status(StatusCodes.BAD_REQUEST).json({ error: 'No ID passed' });
+    if (!isValidObjectId(id)) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Invalid ID' });
+
+    try {
+      const product = await Product.findByIdAndDelete(id);
+      if (!product) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Product not found' });
+
+      return res.status(StatusCodes.OK).json(product);
+    } catch (error) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
 }
 
