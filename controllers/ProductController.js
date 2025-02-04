@@ -87,12 +87,15 @@ class ProductController {
 
     try {
       const product = await Product.findByIdAndDelete(id);
+      console.log(product);
+
       if (!product) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Product not found' });
 
       return res.status(StatusCodes.OK).json(product);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
     }
+  }
 }
 
 export default ProductController;
