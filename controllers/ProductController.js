@@ -58,6 +58,26 @@ class ProductController {
         allowedUpdates.forEach((update) => {
             if (req.body[update]) updates[update] = req.body[update];
         });
+
+        if (updates.categoryId && !isValidObjectId(updates.categoryId)) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Invalid category ID' });
+        }
+
+        if (updates.name && await Product.findOne({ name: updates.name })) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Product name already exists' });
+        }
+
+        try {
+            const product = await Product.findByIdAndUpdate(id, updates, {
+                new: true,
+                runValidators: true
+            });
+            if (!product) return res.status(StatusCodes.NOT_FOUND).json({ error: 'Product not found' });
+            return res.status(StatusCodes.OK).json(product);
+        } catch (error) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+        }
+    }
 }
 
 export default ProductController;
