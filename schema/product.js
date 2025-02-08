@@ -39,4 +39,10 @@ const ProductSchema = new mongoose.Schema({
   },
 });
 
+ProductSchema.pre("save", function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+/* Create a Product model */
 export const Product = mongoose.model("Product", ProductSchema);
