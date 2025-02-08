@@ -22,4 +22,10 @@ const CartSchema = new mongoose.Schema({
   },
 });
 
+CartSchema.pre("save", function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+/* Create a Cart model */
 export const Cart = mongoose.model("Cart", CartSchema);
