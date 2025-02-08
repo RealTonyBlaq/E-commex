@@ -30,4 +30,10 @@ const PaymentSchema = new mongoose.Schema({
   },
 });
 
+PaymentSchema.pre("save", function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+/* Create a Payment model */
 export const Payment = mongoose.model("Payment", PaymentSchema);
