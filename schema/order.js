@@ -32,4 +32,10 @@ const OrderSchema = mongoose.schema({
   },
 });
 
-export const Order = mongoose.model('Order', OrderSchema);
+OrderSchema.pre("save", function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+/* Create an Order model */
+export const Order = mongoose.model("Order", OrderSchema);
