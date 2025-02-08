@@ -14,10 +14,7 @@ class CategoryController {
         }
     
         try {
-        const category = new Category({
-            name,
-            description,
-        });
+        const category = new Category({ name, description });
         await category.save();
         return res.status(StatusCodes.CREATED).json(category);
         } catch (error) {
@@ -27,10 +24,12 @@ class CategoryController {
     
     static async getCategory(req, res) {
         const id = req.query.id;
+
         if (!id) {
         const allCategories = await Category.find();
         return res.status(StatusCodes.OK).json(allCategories);
         }
+
         if (!isValidObjectId(id))
         return res.status(StatusCodes.NOT_FOUND).json({ error: "Invalid Category ID" });
     
