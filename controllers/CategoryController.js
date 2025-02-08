@@ -99,7 +99,9 @@ class CategoryController {
             .json({ error: "Category not found" });
     
         return res.status(StatusCodes.OK).json(category);
-        }
+    } catch (error) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
+    }
   }
 }
 
