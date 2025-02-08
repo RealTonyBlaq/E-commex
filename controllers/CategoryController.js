@@ -87,8 +87,19 @@ class CategoryController {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ error: "No ID passed" });
+
     if (!isValidObjectId(id))
       return res.status(StatusCodes.NOT_FOUND).json({ error: "Invalid ID" });
+
+    try {
+        const category = await Category.findByIdAndDelete(id);
+        if (!category)
+            return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ error: "Category not found" });
+    
+        return res.status(StatusCodes.OK).json(category);
+        }
   }
 }
 
