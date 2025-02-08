@@ -31,4 +31,10 @@ const ReviewSchema = new mongoose.Schema({
   },
 });
 
+ReviewSchema.pre("save", function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+/* Create a Review model */
 export const Review = mongoose.model("Review", ReviewSchema);
