@@ -56,6 +56,7 @@ class CategoryController {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ error: "No ID passed" });
+
     if (!isValidObjectId(id))
       return res.status(StatusCodes.NOT_FOUND).json({ error: "Invalid ID" });
 
