@@ -69,6 +69,7 @@ class CategoryController {
         new: true,
         runValidators: true,
       });
+
       if (!category)
         return res
           .status(StatusCodes.NOT_FOUND)
