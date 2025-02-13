@@ -44,7 +44,9 @@ class CartController {
     try {
         const newCart = new Cart({
             userId,
-            items: listOfProducts,
+            items
         });
-  }
+    } catch (error) {
+        return res.status(StatusCodes.)
+    }
 }
