@@ -52,6 +52,10 @@ class CartController {
         return res.status(StatusCodes.BAD_GATEWAY).json({ error: error.message});
     }
   }
+
+  static async getCart(req, res) {
+    const 
+  }
 }
 
 
