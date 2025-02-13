@@ -28,6 +28,7 @@ class CartController {
         .status(StatusCodes.BAD_REQUEST)
         .json({ error: "Not a list type" });
 
+    const items = [];
     listOfProducts.forEach((product) => {
       const { productId, quantity } = product;
       if (productId && quantity) {
@@ -35,8 +36,11 @@ class CartController {
           return res
             .status(StatusCodes.BAD_REQUEST)
             .json({ error: "Invalid product ID" });
+        
+        items.push({ productId, quantity});
       }
-    }
+    });
+
     try {
         const newCart = new Cart({
             userId,
