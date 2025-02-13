@@ -61,7 +61,8 @@ class CartController {
         .status(StatusCodes.BAD_REQUEST)
         .json({ error: "No cartId passed"});
 
-    
+    if (!isValidObjectId(cartId))
+      retu
   }
 }
 
