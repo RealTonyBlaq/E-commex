@@ -62,9 +62,17 @@ class CartController {
         .json({ error: "No cartId passed"});
 
     if (!isValidObjectId(cartId))
-      retu
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "Invalid Cart ID"});
+
+    const myCart = await Cart.findById(cartId);
+
+    if (!myCart) return res.status(StatusCodes.NOT_FOUND).json({ error: "Not found"});
+    return res
+      .status(StatusCodes.OK)
+      .json(myCart);
   }
 }
-
 
 export default CartController;
