@@ -54,7 +54,14 @@ class CartController {
   }
 
   static async getCart(req, res) {
-    const 
+    const cartId = req.query.cartId;
+
+    if (!cartId)
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "No cartId passed"});
+
+    
   }
 }
 
