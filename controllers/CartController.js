@@ -46,7 +46,13 @@ class CartController {
             userId,
             items
         });
+        await newCart.save();
+        return res.status(StatusCodes.CREATED).json(newCart);
     } catch (error) {
-        return res.status(StatusCodes.)
+        return res.status(StatusCodes.BAD_GATEWAY).json({ error: error.message});
     }
+  }
 }
+
+
+export default CartController;
