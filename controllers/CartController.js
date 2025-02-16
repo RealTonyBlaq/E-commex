@@ -1,6 +1,8 @@
 import { isValidObjectId } from "mongoose";
 import { Cart } from "../schema/cart.js";
 import { StatusCodes } from "http-status-codes";
+import { Product } from "../schema/product.js";
+import { User } from "../schema/user.js";
 
 class CartController {
   static async CreateCart(req, res) {
@@ -18,6 +20,11 @@ class CartController {
         .status(StatusCodes.BAD_REQUEST)
         .json({ error: "Invalid user ID" });
 
+    if (!(await User.findById(userId)))
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "User not found" });
+
     if (!listOfProducts)
       return res
         .status(StatusCodes.BAD_REQUEST)
@@ -28,28 +35,41 @@ class CartController {
         .status(StatusCodes.BAD_REQUEST)
         .json({ error: "Not a list type" });
 
+    if (listOfProducts.length === 0)
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: "Empty list" });
+
     const items = [];
-    listOfProducts.forEach((product) => {
+    for (const product of listOfProducts) {
       const { productId, quantity } = product;
-      if (productId && quantity) {
+      if (productId) {
         if (!isValidObjectId(productId))
           return res
             .status(StatusCodes.BAD_REQUEST)
             .json({ error: "Invalid product ID" });
-        
-        items.push({ productId, quantity});
+
+        if (!(await Product.findById(productId)))
+          return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ error: "Product not found" });
+
+        items.push({ productId, quantity });
       }
-    });
+    }
+
+    if (items.length === 0)
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: "Empty list" });
 
     try {
-        const newCart = new Cart({
-            userId,
-            items
-        });
-        await newCart.save();
-        return res.status(StatusCodes.CREATED).json(newCart);
+      const newCart = new Cart({
+        userId,
+        items,
+      });
+      await newCart.save();
+      return res.status(StatusCodes.CREATED).json(newCart);
     } catch (error) {
-        return res.status(StatusCodes.BAD_GATEWAY).json({ error: error.message});
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: error.message });
     }
   }
 
@@ -59,19 +79,18 @@ class CartController {
     if (!cartId)
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ error: "No cartId passed"});
+        .json({ error: "No cartId passed" });
 
     if (!isValidObjectId(cartId))
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ error: "Invalid Cart ID"});
+        .json({ error: "Invalid Cart ID" });
 
     const myCart = await Cart.findById(cartId);
 
-    if (!myCart) return res.status(StatusCodes.NOT_FOUND).json({ error: "Not found"});
-    return res
-      .status(StatusCodes.OK)
-      .json(myCart);
+    if (!myCart)
+      return res.status(StatusCodes.NOT_FOUND).json({ error: "Not found" });
+    return res.status(StatusCodes.OK).json(myCart);
   }
 }
 
