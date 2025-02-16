@@ -43,8 +43,14 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.methods.comparePassword = async function (password) {
+userSchema.methods.isValidPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.toJSON = function () {
+  const userObject = this.toObject();
+  delete userObject.password;
+  return userObject;
 };
 
 // Create a User model
