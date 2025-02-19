@@ -92,6 +92,48 @@ class CartController {
       return res.status(StatusCodes.NOT_FOUND).json({ error: "Not found" });
     return res.status(StatusCodes.OK).json(myCart);
   }
+
+  static async AddToCart(req, res) {
+    const cartId = req.query.id;
+    const userId = req.query.userId;
+    const { productId, quantity } = req.body;
+
+    if (!isValidObjectId(productId))
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "Invalid product ID" });
+
+    if (!(await Product.findById(productId)))
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "Product not found" });
+
+    const items = [{ productId, quantity }];
+
+    if (!cartId) {
+      try {
+        const newCart = new Cart({
+          userId,
+          items,
+        });
+        newCart.save();
+        return res.status(StatusCodes.CREATED).json(newCart);
+      } catch (error) {
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ error: error.message });
+      }
+    }
+
+    if (!isValidObjectId(cartId))
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: "Invalid Cart ID" });
+
+    const myCart = await Cart.findById(cartId);
+    if (!myCart)
+      return res.status(StatusCodes.NOT_FOUND).json({ error: "Not found" });
+  }
 }
 
 export default CartController;
