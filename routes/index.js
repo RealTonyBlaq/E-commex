@@ -34,9 +34,9 @@ router
 /* Cart Routes */
 router
   .route("/cart")
-  .post(await CartController.CreateCart)
-  .get(await CartController.getCart)
-  /* .put(await CartController.updateCart)
-  .delete(await CartController.deleteCart); */
+  .post(await CartController.AddToCart)
+  .get(await CartController.GetCart)
+  .delete(await CartController.RemoveFromCart)
+
 
 export default router;
