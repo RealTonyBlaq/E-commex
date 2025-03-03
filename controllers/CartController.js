@@ -79,6 +79,14 @@ class CartController {
     if (!myCart)
       return res.status(StatusCodes.NOT_FOUND).json({ error: "Not found" });
 
+    const index = myCart.items.findIndex((item) => item.productId === productId);
+
+    if (index !== -1) {
+      myCart.items[index].quantity++;
+      await myCart.save();
+      return res.status(StatusCodes.OK).json(myCart);
+    }
+
     myCart.items.push({ productId, quantity });
     await myCart.save();
     return res.status(StatusCodes.OK).json(myCart);
