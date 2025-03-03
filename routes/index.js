@@ -3,6 +3,7 @@ import CategoryController from "../controllers/CategoryController.js";
 import ProductController from "../controllers/ProductController.js";
 import UserController from "../controllers/UserController.js";
 import CartController from "../controllers/CartController.js";
+import ReviewsController from "../controllers/ReviewsController.js";
 
 const router = Router();
 
@@ -38,5 +39,12 @@ router
   .get(await CartController.GetCart)
   .delete(await CartController.RemoveFromCart)
 
+/* Review Routes */
+router
+  .route("/reviews")
+  .post(await ReviewsController.createReview)
+  .get(await ReviewsController.getReview)
+  .put(await ReviewsController.updateReview)
+  .delete(await ReviewsController.deleteReview);
 
 export default router;
