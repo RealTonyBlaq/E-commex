@@ -2,33 +2,38 @@ import mongoose from "mongoose";
 
 const ReviewSchema = new mongoose.Schema({
   productId: {
-    type: mongoose.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
-    required: true,
+    validate: {
+      validator: (v) => mongoose.Types.ObjectId.isValid(v),
+      message: (props) => `${props.value} is not a valid product ID`,
+    },
+    trim: true,
+    required: [true, "Product ID is required"],
   },
   userId: {
-    type: mongoose.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    validate: {
+      validator: (v) => mongoose.Types.ObjectId.isValid(v),
+      message: (props) => `${props.value} is not a valid user ID`,
+    },
+    trim: true,
+    required: [true, "User ID is required"],
   },
   rating: {
     type: Number,
-    min: 1,
-    max: 5,
-    default: 1,
+    min: [0, "Rating must be between 0 and 5"],
+    max: [5, "Rating must be between 0 and 5"],
+    default: 0,
   },
   comment: {
     type: String,
-    required: true,
+    default: "",
+    trim: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
+}, {
+  timestamps: true,
 });
 
 ReviewSchema.pre("save", function (next) {
