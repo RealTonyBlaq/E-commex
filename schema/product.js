@@ -3,17 +3,17 @@ import mongoose from "mongoose";
 const ProductSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "Product name is required"],
     trim: true,
   },
   description: {
     type: String,
-    required: true,
+    required: [true, "Product description is required"],
     trim: true,
   },
   imageURL: {
     type: String,
-    required: true,
+    required: [true, "Product image URL is required"],
     trim: true,
   },
   price: {
@@ -22,21 +22,17 @@ const ProductSchema = new mongoose.Schema({
   },
   stockQuantity: {
     type: Number,
-    required: true,
+    min: [1, "Stock quantity must be at least 1"],
+    max: 10000,
+    required: [true, "Stock quantity is required"],
   },
   categoryId: {
     type: mongoose.Types.ObjectId,
     ref: "Category",
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
+}, {
+  timestamps: true,
 });
 
 ProductSchema.pre("save", function (next) {
