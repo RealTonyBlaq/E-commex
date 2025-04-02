@@ -8,7 +8,7 @@ class UserController {
       const { firstName, lastName, email, password, phoneNumber } = req.body;
 
       const missingUploads = [];
-      const fields = { firstName, lastName, email, password };
+      const fields = { firstName, lastName, email, password  };
       Object.keys(fields).forEach((key) => {
         if (!fields[key]) missingUploads.push(key);
       });
@@ -82,10 +82,6 @@ class UserController {
         updates[update] = req.body[update];
       }
     });
-
-    /* if (updates.password) {
-          updates.password = await bcrypt.hash(updates.password, 10);
-        } */
 
     try {
       const user = await User.findByIdAndUpdate(id, updates, {
