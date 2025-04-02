@@ -15,7 +15,6 @@ router
   .put(await UserController.updateUser)
   .delete(await UserController.deleteUser);
 
-
 /* Category Routes */
 router
   .route("/categories")
@@ -37,7 +36,7 @@ router
   .route("/cart")
   .post(await CartController.AddToCart)
   .get(await CartController.GetCart)
-  .delete(await CartController.RemoveFromCart)
+  .delete(await CartController.RemoveFromCart);
 
 /* Review Routes */
 router
