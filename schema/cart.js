@@ -20,15 +20,7 @@ const CartSchema = new mongoose.Schema({
       },
     },
   ],
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
-});
+}, { timestamps: true });
 
 CartSchema.pre("save", function (next) {
   this.updatedAt = Date.now();
