@@ -4,14 +4,22 @@ const CartSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    required: [true, "userId is required"],
+    validate: {
+      validator: (id) => mongoose.Types.ObjectId.isValid(id),
+      message: (props) => `${props.value} is not a valid userId`,
+    }
   },
   items: [
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
-        required: true,
+        required: [true, "productId is required"],
+        validate: {
+          validator: (id) => mongoose.Types.ObjectId.isValid(id),
+          message: (props) => `${props.value} is not a valid productId`,
+        },
       },
       quantity: {
         type: Number,
