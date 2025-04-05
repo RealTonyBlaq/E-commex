@@ -11,15 +11,7 @@ const CategorySchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-  },
-});
+}, { timestamps: true });
 
 CategorySchema.pre("save", function (next) {
   this.updatedAt = Date.now();
