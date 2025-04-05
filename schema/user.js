@@ -4,17 +4,17 @@ import bcrypt from "bcryptjs";
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: true,
+    required: [true, "First name is required"],
     trim: true,
   },
   lastName: {
     type: String,
-    required: true,
+    required: [true, "Last name is required"],
     trim: true,
   },
   email: {
     type: String,
-    required: true,
+    required: [true, "Email is required"],
     unique: true,
     trim: true,
     lowercase: true,
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "Password is required"],
     validate: {
       validator: (v) => {
         return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(v);
@@ -41,15 +41,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  createdAt: {
-    type: Date,
-    default: () => Date.now(),
-  },
-  updatedAt: {
-    type: Date,
-    default: () => Date.now(),
-  },
-});
+}, { timestamps: true });
 
 userSchema.pre("save", async function (next) {
   this.updatedAt = Date.now();
