@@ -7,7 +7,7 @@ class UserController {
     try {
       const { firstName, lastName, email, password, phoneNumber } = req.body;
 
-      const missingUploads = [];
+      /* const missingUploads = [];
       const fields = { firstName, lastName, email, password  };
       Object.keys(fields).forEach((key) => {
         if (!fields[key]) missingUploads.push(key);
@@ -16,7 +16,7 @@ class UserController {
       if (missingUploads.length > 0)
         return res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: `${missingUploads.join(", ")} field(s) are missing` });
+          .json({ error: `${missingUploads.join(", ")} field(s) are missing` }); */
 
       const existingUser = await User.findOne({ email });
       if (existingUser) {
@@ -33,7 +33,7 @@ class UserController {
         phoneNumber,
       });
 
-      await user.save();
+      await user.save({ runValidators: true });
       return res.status(StatusCodes.CREATED).json(user.toJSON());
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
