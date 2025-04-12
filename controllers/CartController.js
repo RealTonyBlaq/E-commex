@@ -2,7 +2,6 @@ import { isValidObjectId } from "mongoose";
 import { Cart } from "../schema/cart.js";
 import { StatusCodes } from "http-status-codes";
 import { Product } from "../schema/product.js";
-import { User } from "../schema/user.js";
 
 class CartController {
   static async GetCart(req, res) {
@@ -41,31 +40,16 @@ class CartController {
 
     const items = [{ productId, quantity }];
     if (!cartId) {
-      if (!userId)
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ error: "No user ID passed" });
-
-      if (!isValidObjectId(userId))
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ error: "Invalid user ID" });
-
-      if (!(await User.findById(userId)))
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ error: "User not found" });
-
       try {
         const newCart = new Cart({
           userId,
           items,
         });
-        newCart.save();
+        newCart.save( { runValidators: true });
         return res.status(StatusCodes.CREATED).json(newCart);
       } catch (error) {
         return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .status(StatusCodes.BAD_REQUEST)
           .json({ error: error.message });
       }
     }
