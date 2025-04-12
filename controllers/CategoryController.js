@@ -6,15 +6,10 @@ import { StatusCodes } from "http-status-codes";
 class CategoryController {
   static async createCategory(req, res) {
     const { name, description } = req.body;
-    if (!name || !description) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: "All fields are required" });
-    }
 
     try {
       const category = new Category({ name, description });
-      await category.save();
+      await category.save({ runValidators: true });
       return res.status(StatusCodes.CREATED).json(category);
     } catch (error) {
       return res.status(StatusCodes.BAD_REQUEST).json({ error: error.message });
