@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Password is required"],
     validate: {
       validator: (v) => {
-        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(v);
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(v);
       },
       message: () =>
         `Password must contain at least 8 characters,\
@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("updateOne", async function (next) {
   this.updatedAt = Date.now();
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);
