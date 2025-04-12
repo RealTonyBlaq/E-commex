@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const CategorySchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, "category name is missing"],
     trim: true,
   },
   description: {
     type: String,
-    required: true,
+    required: [true, "description is missing"],
     trim: true,
   },
 }, { timestamps: true });
