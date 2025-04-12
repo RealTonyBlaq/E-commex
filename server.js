@@ -14,6 +14,7 @@ connectDB();
 const PORT = process.env.PORT || 3000;
 const app = express();
 
+/* Checks if application/json content-type is used in POST/PUT requests */
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   if (req.method === "POST" || req.method === "PUT") {
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
   next();
 });
 
+/* Checks request data for data error */
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
     return res
@@ -41,7 +43,7 @@ app.get("/", (req, res) => {
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-app.use(router);
+app.use("/api/v1", router);
 
 app.listen(PORT, () => {
   console.log(`Server connected and listening on http://127.0.0.1:${PORT}`);
